@@ -1,0 +1,27 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+    <script type="module">
+        import { ViewZ } from '../../../lib/viewz.mjs';
+
+        //give HTML/CSS/JS files to the view
+        const view = new ViewZ({
+            html: `simple-view.html`,
+            css: `simple-view.css`,
+            js: `simple-view.js`,
+            id: `simple-view`,
+        })
+
+        // start the binding
+        const container = document.getElementById('container');
+        //render the view inside the container
+        view.render({container}) ;
+    </script>
+</body>
+</html>

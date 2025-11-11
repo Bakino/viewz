@@ -1,0 +1,72 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <div
+            z-bind="block of blocks"
+            z-recurse="blocks"
+            style="padding-left: ${recurseLevel * 10}px"
+        >
+            <div>
+                ${block.name}
+                <span z-on-click="myFunctions.showAlert(block)" style="font-size: 0.8em; cursor: pointer; text-decoration: underline;">(Click me)</span>
+            </div>
+
+            <!-- Recursivity will happen in this container -->
+            <div z-recurse-container=""></div>
+
+        </div>
+    </div>
+    <script type="module">
+        import { bind } from '../../lib/bindz.mjs';
+
+        function randomInt(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
+
+        function createBlock(recurseLevel = 0){
+            if(recurseLevel >= 5){
+                return {
+                    name: `Block ${Math.random().toString(36).substring(2, 7)}`,
+                    blocks: []
+                } ;
+            }
+            const block = {
+                name: `Block ${Math.random().toString(36).substring(2, 7)}`,
+                blocks: []
+            } ;
+
+            const numberOfSubBlocks = randomInt(0,2) ;
+            for(let i=0; i<numberOfSubBlocks; i++){
+                block.blocks.push( createBlock(recurseLevel + 1) ) ;
+            }
+
+            return block ;
+        }
+
+        const blocks = [] ;
+        for(let i=1; i<=5; i++){
+            blocks.push(createBlock());
+        }
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            blocks
+        };
+
+        const myFunctions = {
+            showAlert: (item) => {
+                alert(`You clicked on ${item.name}`);
+            }
+        }
+
+        // start the binding
+        bind(document.getElementById('container'), data, { myFunctions });
+    </script>
+</body>
+</html>

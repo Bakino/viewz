@@ -1,0 +1,43 @@
+
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <button type="button" z-on-click="myFunctions.showAlert()">Click me!</button>
+        <button type="button" z-on-dblclick="myFunctions.showAlert(event, this)">Double click me!</button>
+        <button type="button" 
+            z-on-click="myFunctions.showAlert(event, this)"  
+            z-on-dblclick="myFunctions.showAlert(event, this)" 
+            z-prevent-double-click>You can't double click me</button>
+    </div>
+    <script type="module">
+        import { bind } from '../../lib/bindz.mjs';
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            description: 'This is a simple example of data binding using BindZ.',
+            styling: {
+                color: 'blue'
+            }
+        };
+
+        const myFunctions = {
+            showAlert: (event, element) => {
+                if(event){
+                    alert(`You did a ${event.type} on element with text: ${element.textContent}`);
+                }else{
+                    alert('Button clicked!');
+                }
+            }
+        }
+
+        // start the binding. Give a context with functions to call on events
+        bind(document.getElementById('container'), data, { myFunctions });
+    </script>
+</body>
+</html>

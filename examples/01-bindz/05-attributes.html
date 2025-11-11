@@ -1,0 +1,35 @@
+
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <p style="color: ${styling.color}">${description}</p>
+        <select z-bind="styling.color">
+            <option value="black">Black</option>
+            <option value="red">Red</option>
+            <option value="green">Green</option>
+            <option value="blue">Blue</option>
+        </select>
+        <input type="checkbox" disabled checked="${styling.color=='blue'}"> I am checked when the color is blue
+    </div>
+    <script type="module">
+        import { bind } from '../../lib/bindz.mjs';
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            description: 'This is a simple example of data binding using BindZ.',
+            styling: {
+                color: 'blue'
+            }
+        };
+
+        // start the binding
+        bind(document.getElementById('container'), data);
+    </script>
+</body>
+</html>

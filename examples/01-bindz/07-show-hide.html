@@ -1,0 +1,27 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <p z-bind="description" z-show-if="showDescription"></p>
+        <p z-hide-if="showDescription">I am show if the description is hidden</p>
+        <input type="checkbox" z-bind="showDescription"> Show Description
+    </div>
+    <script type="module">
+        import { bind } from '../../lib/bindz.mjs';
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            showDescription: true,
+            description: 'This is a simple example of data binding using BindZ.'
+        };
+
+        // start the binding
+        bind(document.getElementById('container'), data);
+    </script>
+</body>
+</html>

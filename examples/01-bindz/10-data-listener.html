@@ -1,0 +1,39 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <p z-bind="description"></p>
+        <input type="text" z-bind="description" style="width: 100%;"/>
+
+        The description has been modified <span z-bind="numberOfModifications"></span> times
+    </div>
+    <script type="module">
+        import { bind } from '../../lib/bindz.mjs';
+
+        
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            description: "Initial description",
+            numberOfModifications: 0
+        };
+
+        // start the binding
+        const bindz = bind(document.getElementById('container'), data);
+
+        bindz.data.addListener("description", () => {
+            //called each time the description is modified
+            bindz.getData().numberOfModifications++;
+        });
+        bindz.data.addListener("*", (ev) => {
+            //called each time anything is modified
+            console.log("data changed", ev, bindz.getData());
+        });
+    </script>
+</body>
+</html>

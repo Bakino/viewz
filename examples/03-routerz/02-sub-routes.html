@@ -1,0 +1,73 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Sub routes</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+    <script type="module">
+        import { ViewZ } from '../../../lib/viewz.mjs';
+        import { RouterZ, constants } from '../../../lib/routerz.mjs';
+
+        const viewParent = new ViewZ({
+            html: `views/view-parent/view-parent.html`,
+            css: `views/view-parent/view-parent.css`,
+            js: `views/view-parent/view-parent.js`,
+            id: `view-parent`,
+        })
+        const viewSubParent = new ViewZ({
+            html: `views/view-sub-parent/view-sub-parent.html`,
+            css: `views/view-sub-parent/view-sub-parent.css`,
+            js: `views/view-sub-parent/view-sub-parent.js`,
+            id: `view-sub-parent`,
+        })
+        const view01 = new ViewZ({
+            html: `views/view-01/view-01.html`,
+            css: `views/view-01/view-01.css`,
+            js: `views/view-01/view-01.js`,
+            id: `view-01`,
+        })
+        const view02 = new ViewZ({
+            html: `views/view-02/view-02.html`,
+            css: `views/view-02/view-02.css`,
+            js: `views/view-02/view-02.js`,
+            id: `view-02`,
+        })
+        const view03 = new ViewZ({
+            html: `views/view-03/view-03.html`,
+            css: `views/view-03/view-03.css`,
+            js: `views/view-03/view-03.js`,
+            id: `view-03`,
+        })
+        const view04 = new ViewZ({
+            html: `views/view-04/view-04.html`,
+            css: `views/view-04/view-04.css`,
+            js: `views/view-04/view-04.js`,
+            id: `view-04`,
+        })
+
+        const container = document.getElementById('container');
+
+        // create the router
+        const router = new RouterZ({
+            type: constants.HASH, //use browser history API
+            container: container
+        }) ;
+
+        // register the routes
+        router.addRoute({url: "/", view: viewParent, routes: [
+            {url: "/view-01", view: view01, defaultChild: true},
+            {url: "/view-02", view: view02},
+            {url: "/sub", view: viewSubParent, routes: [
+                {url: "/sub/view-03", view: view03, defaultChild: true},
+                {url: "/sub/view-04", view: view04}
+            ]}
+        ]}) ;
+
+
+        router.start() ;
+    </script>
+</body>
+</html>

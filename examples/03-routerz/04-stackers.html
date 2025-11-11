@@ -1,0 +1,70 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Stackers</title>
+    <link rel="stylesheet" href="../../../lib/stackerz-style.css">
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+    <script type="module">
+        import { ViewZ } from '../../../lib/viewz.mjs';
+        import { RouterZ, constants } from '../../../lib/routerz.mjs';
+        import { stackerLeft, stackerRight } from '../../../lib/stackerz.mjs';
+
+        const viewParent = new ViewZ({
+            html: `views/view-parent-params/view-parent-params.html`,
+            css: `views/view-parent-params/view-parent-params.css`,
+            js: `views/view-parent-params/view-parent-params.js`,
+            id: `view-parent`,
+        })
+        const view01 = new ViewZ({
+            html: `views/view-01/view-01.html`,
+            css: `views/view-01/view-01.css`,
+            js: `views/view-01/view-01.js`,
+            id: `view-01`,
+        })
+
+        const view02 = new ViewZ({
+            html: `views/view-02/view-02.html`,
+            css: `views/view-02/view-02.css`,
+            js: `views/view-02/view-02.js`,
+            id: `view-02`,
+        })
+        const view03 = new ViewZ({
+            html: `views/view-03/view-03.html`,
+            css: `views/view-03/view-03.css`,
+            js: `views/view-03/view-03.js`,
+            id: `view-03`,
+        })
+         const viewStack = new ViewZ({
+            html: `views/view-stack/view-stack.html`,
+            css: `views/view-stack/view-stack.css`,
+            js: `views/view-stack/view-stack.js`,
+            id: `view-stack`,
+        })
+
+        const container = document.getElementById('container');
+
+        RouterZ.loadStacker(stackerLeft) ;
+        RouterZ.loadStacker(stackerRight) ;
+
+        // create the router
+        const router = new RouterZ({
+            type: constants.HASH, //use browser history API
+            container: container
+        }) ;
+
+        // register the routes
+        router.addRoute({url: "/", view: viewParent, routes: [
+            {url: "/view-stack/", view: viewStack, defaultChild: true},
+            {url: "/view-02/", view: view02},
+            {url: "/view-03/", view: view03}
+        ]}) ;
+
+
+        router.start() ;
+    </script>
+</body>
+</html>

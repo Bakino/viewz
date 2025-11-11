@@ -1,0 +1,7 @@
+<h1 z-bind="title"></h1>
+<button type="button" z-on-click="view.showAlert()">Click me!</button>
+<button type="button" z-on-dblclick="view.showAlert(event, this)">Double click me!</button>
+<button type="button" 
+    z-on-click="view.showAlert(event, this)"  
+    z-on-dblclick="view.showAlert(event, this)" 
+    z-prevent-double-click>You can't double click me</button>

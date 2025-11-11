@@ -1,0 +1,4 @@
+/* CSS is applied only inside the view container*/
+h1 {
+    color: blue;
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        <h1 z-bind="title"></h1>
+        <p>${UPPER:description}</p>
+    </div>
+    <script type="module">
+        import { bind, registerFormatter } from '../../lib/bindz.mjs';
+
+        // data to bind to the HTML element
+        const data = {
+            title: 'Hello, World!',
+            description: 'This is a simple example of data binding using BindZ.'
+        };
+
+        // register a custom formatter
+        registerFormatter({
+            prefix: 'UPPER',
+            createElement: (placeHolderText)=>{
+                // placeholder is the text inside ${...}
+                const span = document.createElement("span") ;
+                span.style.textTransform = "uppercase" ;
+                span.setAttribute("z-bind", placeHolderText.split(":")[1]) ;
+                return span ;
+            }
+        });
+
+        // start the binding
+        bind(document.getElementById('container'), data);
+    </script>
+</body>
+</html>
