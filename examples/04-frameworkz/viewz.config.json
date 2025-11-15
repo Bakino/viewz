@@ -1,0 +1,20 @@
+{
+  "routing": "HASH",
+  "viewsPath": "views",
+  "routes": [
+    {
+      "url": "/",
+      "path": "root",
+      "subRoutes": [
+        {
+          "url": "/todo{/:state}",
+          "path": "todo",
+          "defaultChild": true
+        }
+      ]
+    }
+  ],
+  "extensions": [
+    { "url": "extension-local-storage.js" }
+  ]
+}

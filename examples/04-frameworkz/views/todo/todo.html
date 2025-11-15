@@ -1,0 +1,49 @@
+<section class="todoapp">
+    <header class="header">
+        <h1>todos</h1>
+        <input class="new-todo" placeholder="What needs to be done?" z-on-enter="view.addTodo()" z-bind="newTodo" autofocus>
+    </header>
+    <!-- This section should be hidden by default and shown when there are todos -->
+    <section class="main">
+        <input id="toggle-all" class="toggle-all" type="checkbox" z-on-click="view.toogleAll()">
+        <label for="toggle-all">Mark all as complete</label>
+        <ul class="todo-list">
+            
+            <li z-bind="todo of todos" 
+                z-show-if="!filter || (filter=='active' && !todo.completed) || (filter=='completed' && todo.completed)"
+                z-class="${todo.completed?'completed':''} ${todo.editing?'editing':''}">
+                <div class="view" z-hide-if="todo.editing" >
+                    <input class="toggle" type="checkbox" z-bind="todo.completed">
+                    <label z-on-dblclick="view.editTodo(todo, this)">${todo.label}</label>
+                    <button class="destroy" z-on-click="view.removeTodo(todo)"></button>
+                </div>
+                <input z-show-if="todo.editing" 
+                    z-on-enter="view.editFinish(todo)"
+                    z-on-escape="view.editCancel(todo)"
+                    z-bind="todo.label" class="edit" value="Create a TodoMVC template">
+            </li>
+        </ul>
+    </section>
+    <!-- This footer should be hidden by default and shown when there are todos -->
+    <footer class="footer">
+        <!-- This should be `0 items left` by default -->
+        <span class="todo-count"><strong>${todos.filter(t=>!t.completed).length}</strong> item<span z-show-if="todos.filter(t=>!t.completed).length>1">s</span> left</span>
+        <!-- Remove this if you don't implement routing -->
+        <ul class="filters">
+            <li>
+                <a z-class="${!filter?'selected':''}" href="#/">All</a>
+            </li>
+            <li>
+                <a z-class="${filter=='active'?'selected':''}" href="#/todo/active">Active</a>
+            </li>
+            <li>
+                <a z-class="${filter=='completed'?'selected':''}" href="#/todo/completed">Completed</a>
+            </li>
+        </ul>
+        <!-- Hidden if no completed items are left ↓ -->
+        <button class="clear-completed" 
+            z-show-if="todos.some(t=>t.completed)"
+            z-on-click="view.removeCompleted()">Clear completed</button>
+    </footer>
+</section>
+
