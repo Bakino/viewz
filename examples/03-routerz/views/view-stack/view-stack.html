@@ -12,6 +12,50 @@
 <div>
     <a href="/*(!x*/view-03/*)!x*/view-03">Open 2 stacks</a>
 </div>
+
 <div>
-    <button z-on-click="view.openInPopup()">Open an wait for a result</button>
+    <a href="/*i*/view-04">Open view 04 inplace</a>
+</div>
+
+<div>
+    <div>
+        <select z-bind="openMode">
+            <option>Choose open mode</option>
+            <option value=")">Left overlay</option>
+            <option value="(">Right overlay</option>
+            <option value="_">Bottom overlay</option>
+            <option value="-">Top overlay</option>
+            <option value="()">Dialog</option>
+            <option value="F">Fullscreen</option>
+            <option value="i">Inplace</option>
+            <option value="-I">Side left</option>
+            <option value="I-">Side right</option>
+            <option value="L">Side bottom</option>
+            <option value="T">Side top</option>
+        </select>
+    </div>
+    <div>
+        Options : 
+        <div>
+            <input type="checkbox" z-bind="options.x" /> Show close button
+            <span z-show-if="['-I', 'I-', 'T', 'L'].includes(openMode)">
+                <input type="checkbox" z-bind="options.r" /> Resizeable
+            </span>
+        </div>
+        <div>
+            Width : <input type="text" z-bind="options.w" /> 
+            Height : <input type="text" z-bind="options.h" /> 
+            Background : <input type="color" z-bind="options.bg" /> 
+            Transition duration : <input type="text" z-bind="options.t" /> 
+        </div>
+    </div>
+    <button z-on-click="view.openNow()">Open</button>
+</div>
+
+<div>
+    <button z-on-click="view.openInPopup()">Open and wait for a result</button>
+</div>
+
+<div>
+    <button z-on-click="view.openInPopupGetView()">Open and get openned view</button>
 </div>

@@ -11,7 +11,11 @@
     <script type="module">
         import { ViewZ } from '../../../lib/viewz.mjs';
         import { RouterZ, constants } from '../../../lib/routerz.mjs';
-        import { stackerLeft, stackerRight } from '../../../lib/stackerz.mjs';
+        import { stackerLeft, stackerRight, stackerInplace, 
+            stackerBottom,stackerTop, stackerDialog, 
+            stackerFullscreen,
+            stackerSideBottom, stackerSideTop, stackerSideRight, stackerSideLeft
+          } from '../../../lib/stackerz.mjs';
 
         const viewParent = new ViewZ({
             html: `views/view-parent-params/view-parent-params.html`,
@@ -38,6 +42,12 @@
             js: `views/view-03/view-03.js`,
             id: `view-03`,
         })
+        const view04 = new ViewZ({
+            html: `views/view-04/view-04.html`,
+            css: `views/view-04/view-04.css`,
+            js: `views/view-04/view-04.js`,
+            id: `view-04`,
+        })
          const viewStack = new ViewZ({
             html: `views/view-stack/view-stack.html`,
             css: `views/view-stack/view-stack.css`,
@@ -49,6 +59,15 @@
 
         RouterZ.loadStacker(stackerLeft) ;
         RouterZ.loadStacker(stackerRight) ;
+        RouterZ.loadStacker(stackerInplace) ;
+        RouterZ.loadStacker(stackerBottom) ;
+        RouterZ.loadStacker(stackerTop) ;
+        RouterZ.loadStacker(stackerDialog) ;
+        RouterZ.loadStacker(stackerFullscreen) ;
+        RouterZ.loadStacker(stackerSideTop) ;
+        RouterZ.loadStacker(stackerSideBottom) ;
+        RouterZ.loadStacker(stackerSideRight) ;
+        RouterZ.loadStacker(stackerSideLeft) ;
 
         // create the router
         const router = new RouterZ({
@@ -60,7 +79,8 @@
         router.addRoute({url: "/", view: viewParent, routes: [
             {url: "/view-stack/", view: viewStack, defaultChild: true},
             {url: "/view-02/", view: view02},
-            {url: "/view-03/", view: view03}
+            {url: "/view-03/", view: view03},
+            {url: "/view-04/", view: view04}
         ]}) ;
 
 

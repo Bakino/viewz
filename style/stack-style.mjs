@@ -28,6 +28,11 @@ export default css = `
     overflow-y: auto;
 }
 
+.viewz-stack-side-top,
+.viewz-stack-side-left {
+    order: -1;
+}
+
 .viewz-stack-right.has-close,
 .viewz-stack-left.has-close,
 .viewz-stack-bottom.has-close,
