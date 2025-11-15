@@ -44,6 +44,8 @@
         router.addRoute({url: "/view-02", view: view02}) ;
         router.addRoute({url: "/view-03", view: view03}) ;
 
+        await router.cacheAllViews() ;
+
         router.start() ;
     </script>
 </body>
