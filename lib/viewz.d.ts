@@ -1,4 +1,6 @@
 
+/// <reference lib="dom" />
+
 /**
  * Represents a Router for managing application routes.
  */
@@ -109,7 +111,7 @@ declare class ViewZRouter {
      * 
      * @returns A promise that resolves when navigation is complete.
      */
-    closeStack()
+    closeStack(): void;
   
 }
 
@@ -130,7 +132,7 @@ declare interface WaiterOptions {
  * 
  * @param promise The promise to wait for. It can also be an async function
  */
-function waiter(promise: Promise<any>|function, options?: WaiterOptions): Promise<any>;
+declare function waiter(promise: Promise<any>|Function, options?: WaiterOptions): Promise<any>;
 
 /**
  * Import a lib in global headers
@@ -160,7 +162,7 @@ declare function loadScript(url: string): Promise<void>;
  * 
  * @param f the async function
  */
-function noWaiter(f: function): function;
+declare function noWaiter(f: Function): Function;
 
 
 /**
@@ -172,7 +174,7 @@ declare interface ViewRoute {
      * 
      * example, the URL /user/:id will have the following parameters: {id: ""}
      */
-    params: object;
+    params: any;
 
     /**
      * Change the route parameters
@@ -194,10 +196,27 @@ declare interface ViewExtension {
     config?: object;
 }
 
+declare interface ViewOptions {
+    /** Can be either path to the HTML file or directly the HTML source */
+    html: string,
+    /** Can be either path to the JS file or directly the JS source */
+    js: string,
+    /** Can be either path to the CSS file or directly the CSS source */
+    css: string,
+    /** ID of the view */
+    id: string,
+    /** Provide your own spinner source code. The spinner is display during the loading of the view */
+    spinner?: string,
+}
+
 /**
  * ViewZ class
  */
 declare class ViewZ {
+    /** You can add you methods, usually event handling functions */
+    [key: string]: any;
+
+
     /** loaded extension */
     static extensions: any[];
     /**
@@ -230,7 +249,7 @@ declare class ViewZ {
     /** The route information */
     route: ViewRoute;
     /** The data rendered by the view */
-    data: object;
+    data: any;
 
     constructor(options: ViewOptions);
 
@@ -291,7 +310,7 @@ declare class ViewZ {
      * 
      * The path can take * as joker (ex: person.*)
      */
-    addDataListener(path:string, listener: function): void;
+    addDataListener(path:string, listener: Function): void;
 
     /**
      * Refresh the view (run again the loader function and render with the new data)
@@ -346,5 +365,3 @@ declare class ViewZ {
 }
 
 declare const view: ViewZ;
-declare const waiter: typeof waiter;
-declare const loadScript: typeof loadScript;

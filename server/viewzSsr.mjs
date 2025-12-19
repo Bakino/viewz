@@ -12,22 +12,21 @@ export async function createMiddleware({sourcePath, base, containerId}){
     let html = await readFile(path.join(sourcePath, "index.html"), {encoding: "utf8"});
     let dom = new JSDOM(html);
     try{
-        let options = { mode: "BROWSER" } ;
-        let routes = await fs.readJson(path.join(sourcePath, "routes.json"));
-        if(routes.routes){
-            options = routes.options;
-            routes = routes.routes;
-        }
-        if(options.mode !== "BROWSER"){
+        const viewzConfig = await fs.readJson(path.join(sourcePath, "viewz.config.json"));
+        const routing = viewzConfig.routing??"BROWSER" ;
+        
+        if(routing !== "BROWSER"){
             return (req, res, next)=>next() ;
         }
+        
+        const routes = viewzConfig.routes ;
 
         let baseEl = dom.window.document.head.querySelector("base");
         if(!base && baseEl){
             base = baseEl.getAttribute("href").replace(/\/$/, "") ;
         }
         for(let route of routes){
-            let fullRoute = ((base??"")+route.route).replace(/\/:(\w+)\?/g, "{/:$1}");
+            let fullRoute = ((base??"")+route.url).replace(/\/:(\w+)\?/g, "{/:$1}");
             route.regexp = pathToRegexp(fullRoute)
         }
         return async (req, res, next)=>{
@@ -41,10 +40,15 @@ export async function createMiddleware({sourcePath, base, containerId}){
                     if(!viewName){
                         viewName = route.path.replace(/\/$/, "").substring(route.path.lastIndexOf("/")+1);
                     }
+
+                    let viewPath = sourcePath ;
+                    if(viewzConfig.viewsPath){
+                        viewPath = path.join(sourcePath, viewzConfig.viewsPath) ;
+                    }
                     
                     //get HTML/CSS sources
-                    let html = await readFile(path.join(sourcePath, `${route.path}/${viewName}.html`), {encoding: "utf8"});
-                    let css = await readFile(path.join(sourcePath, `${route.path}/${viewName}.css`), {encoding: "utf8"});
+                    let html = await readFile(path.join(viewPath, `${route.path}/${viewName}.html`), {encoding: "utf8"});
+                    let css = await readFile(path.join(viewPath, `${route.path}/${viewName}.css`), {encoding: "utf8"});
     
                     if(css){
                         //TODO : when @scope is supported on FF and Safari, add it directly from here
@@ -82,18 +86,17 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
     let html = await readFile(path.join(sourcePath, "index.html"), {encoding: "utf8"});
     let dom = new JSDOM(html);
     let routes = [];
-    let options = { mode: "BROWSER" } ;
+    let routing =  "BROWSER" ;
+    let viewzConfig;
     try{
-        routes = await fs.readJson(path.join(sourcePath, "routes.json"));
-        if(routes.routes){
-            options = routes.options;
-            routes = routes.routes;
-        }
+        viewzConfig = await fs.readJson(path.join(sourcePath, "viewz.config.json"));
+        routing = viewzConfig.routing??"BROWSER" ;
+        routes = viewzConfig.routes ;
     }catch(err){
         console.log("No routes defined in "+sourcePath, err) ;
     }
 
-    if(options.mode !== "BROWSER"){
+    if(routing !== "BROWSER"){
         //not browser navigation, no SSR
         return ()=>null ;
     }
@@ -107,9 +110,9 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
     let allRoutes = [] ;
 
     function registerRoute({route, parentPath=[], level=0}){
-        let fullRoute = route.route ;
+        let fullRoute = route.url ;
         if(parentPath){
-          fullRoute = parentPath.filter(p=>p.route !== "/").map(p=>p.route).concat([route.route]).join("/") ;
+          fullRoute = parentPath.filter(p=>p.url !== "/").map(p=>p.url).concat([route.url]).join("/") ;
         }
         let pattern = ((base??"")+fullRoute).replace(/\/:(\w+)\?/g, "{/:$1}")
         route.regexp = pathToRegexp(pattern) ;
@@ -118,14 +121,20 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
             for(let parent of parentPath){
                 await parent.openRoute({req}) ;
             }
+
             let viewName = route.name;
             if(!viewName){
                 viewName = route.path.replace(/\/$/, "").substring(route.path.lastIndexOf("/")+1);
             }
+
+            let viewPath = sourcePath ;
+            if(viewzConfig?.viewsPath){
+                viewPath = path.join(sourcePath, viewzConfig.viewsPath) ;
+            }
             
             //get HTML/CSS sources
-            let html = await readFile(path.join(sourcePath, `${route.path}/${viewName}.html`), {encoding: "utf8"});
-            let css = await readFile(path.join(sourcePath, `${route.path}/${viewName}.css`), {encoding: "utf8"});
+            let html = await readFile(path.join(viewPath, `${route.path}/${viewName}.html`), {encoding: "utf8"});
+            let css = await readFile(path.join(viewPath, `${route.path}/${viewName}.css`), {encoding: "utf8"});
     
             if(css){
                 //TODO : when @scope is supported on FF and Safari, add it directly from here
@@ -190,7 +199,6 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
 
     for(let route of routes){
         registerRoute({route}) ;
-        
     }
 
     return async (req)=>{
