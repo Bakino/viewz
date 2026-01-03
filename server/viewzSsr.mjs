@@ -112,7 +112,7 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
     function registerRoute({route, parentPath = [], level=0}){
         let fullRoute = route.url ;
         if(parentPath){
-            fullRoute = parentPath.join("/").replace(/\/$/, "") + "/" + fullRoute.replace(/^\//, "") ;
+            fullRoute = "/"+parentPath.map(p=>p.url.replace(/\/$/, "").replace(/^\//, "")).join("/") + "/" + fullRoute.replace(/^\//, "") ;
         }
         let pattern = ((base??"")+fullRoute).replace(/\/:(\w+)\?/g, "{/:$1}")
         route.regexp = pathToRegexp(pattern) ;
@@ -192,7 +192,7 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
 
         if(route.subRoutes){
             for(let subRoute of route.subRoutes){
-                registerRoute({route: subRoute, parentPath: fullRoute.split("/"), level: level+1}) ;
+                registerRoute({route: subRoute, parentPath : parentPath.concat([route]), level: level+1}) ;
             }
         }
     }
