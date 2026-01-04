@@ -163,6 +163,9 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
 
             
             container.setAttribute("zz-ssr", viewName);
+            if(parentPath.length === 0){
+                container.classList.add("viewz-loading") ;
+            }
             container.setAttribute("style", "opacity: 0;") ;
             container.innerHTML = `${css}${html}` ;
             if(htmlProcessors){
