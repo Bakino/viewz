@@ -1,8 +1,8 @@
 view.loader = async ()=>{
     const time = new Date().toLocaleTimeString();
-    const color = view.route.params.color??"green" ;
+    const clockColor = view.route.params.clockColor??"green" ;
     const clockName = view.route.params.clock??"" ;
-    return {time, color, clockName} ;
+    return {time, clockColor, clockName} ;
 }
 
 view.displayed = ()=>{

@@ -4,10 +4,10 @@ view.timeChanged = (event)=>{
 
 view.changeColor = ()=>{
     const clock = view.getElementById("anotherClock") ;
-    clock.setAttribute("color", "red") ;
+    clock.setAttribute("clock-color", "red") ;
 }
 
 view.changeColorThroughData = ()=>{
     const clock = view.getElementById("anotherClock") ;
-    clock.view.data.color = "yellow" ;
+    clock.view.data.clockColor = "yellow" ;
 }
