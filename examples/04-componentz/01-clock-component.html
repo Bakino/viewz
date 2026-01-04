@@ -1,0 +1,30 @@
+<!doctype html>
+<head>
+    <meta charset="utf-8">
+    <title>Simple Binding</title>
+</head>
+<body>
+    <div id="container">
+        
+    </div>
+    <script type="module">
+        import { ViewZ } from '../../../lib/viewz.mjs';
+        import { createComponent } from '../../../lib/componentz.mjs';
+
+        createComponent("components", {name: "clock"}) ;
+
+        //give HTML/CSS/JS files to the view
+        const view = new ViewZ({
+            html: `example-component.html`,
+            css: `example-component.css`,
+            js: `example-component.js`,
+            id: `example-component`,
+        })
+
+        // start the binding
+        const container = document.getElementById('container');
+        //render the view inside the container
+        view.render({container}) ;
+    </script>
+</body>
+</html>

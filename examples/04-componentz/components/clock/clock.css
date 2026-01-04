@@ -1,0 +1,14 @@
+.clock {
+    padding: 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 2em;
+    background-color: black;
+    color: green ;
+}
+.clock-name {
+    padding: 2px 5px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.8em;
+    background-color: black;
+    color: yellow ;
+}
