@@ -7,7 +7,8 @@ view.loader = async ()=>{
 
 view.displayed = ()=>{
     view.data.addListener("time", ()=>{
-        view.container.dispatchEvent(new CustomEvent("time", {detail: view.data.time})) ;
+        view.dispatchEvent("time", view.data.time)
+        //same as view.container.dispatchEvent(new CustomEvent("time", {detail: view.data.time})) ;
     }) ;
     setInterval(()=>{
         view.data.time = new Date().toLocaleTimeString() ;
