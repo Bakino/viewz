@@ -112,6 +112,8 @@ declare class ViewZRouter {
      * @returns A promise that resolves when navigation is complete.
      */
     closeStack(): void;
+
+    getStackedRoutes(): RouteStackItem[];
   
 }
 
@@ -168,6 +170,51 @@ declare function noWaiter(f: Function): Function;
 /**
  * Route information
  */
+declare interface ViewRoute {
+    /**
+     * The parameters received from the route URL
+     * 
+     * example, the URL /user/:id will have the following parameters: {id: ""}
+     */
+    params: any;
+
+    /**
+     * Change the route parameters
+     * 
+     * @param params The parameters to set ({param1: "value1", param2: "value2"})
+     */
+    setParams(params: object): void;
+}
+
+declare interface RouteStackOptions {
+    layout: string;
+    level: number;
+}
+declare interface RouteStackItem {
+    path: string;
+    route: RouteZ;
+    routeInstance: RouteInstanceZ;
+    stackOptions: RouteStackOptions;
+}
+
+declare interface RouteZ {
+    url: string;
+    regexp: RegExp;
+    view: ViewZ;
+    title: string;
+    parent: RouteZ;
+    defaultChild: true;
+    routes: RouteZ[];
+    instances: RouteInstanceZ[] ;
+}
+
+declare interface RouteInstanceZ {
+    view: ViewZ;
+    renderId: string;
+    result: any;
+    childrenViews: ViewZ[];
+}
+
 declare interface ViewRoute {
     /**
      * The parameters received from the route URL
