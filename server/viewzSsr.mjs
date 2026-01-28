@@ -112,7 +112,12 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
     function registerRoute({route, parentPath = [], level=0}){
         let fullRoute = route.url ;
         if(parentPath){
-            fullRoute = "/"+parentPath.map(p=>p.url.replace(/\/$/, "").replace(/^\//, "")).join("/") + "/" + fullRoute.replace(/^\//, "") ;
+            fullRoute = "/"
+            const parentUrl = parentPath.map(p=>p.url.replace(/\/$/, "").replace(/^\//, "")).join("/") ;
+            if(parentUrl){
+                fullRoute += parentUrl+"/" ;
+            }
+            fullRoute += route.url.replace(/^\//, "") ;
         }
         let pattern = ((base??"")+fullRoute).replace(/\/:(\w+)\?/g, "{/:$1}")
         route.regexp = pathToRegexp(pattern) ;
