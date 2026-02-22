@@ -20,19 +20,4 @@
     animation: bamz_spinner .6s linear infinite;
 }
 
-.viewz-loading::before {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  width: 40px;
-  height: 40px;
-  margin: -20px 0 0 -20px;
-  border: 4px solid #dcdcdc;
-  border-top: 4px solid #333;
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
-  z-index: 11;
-}
-
 @keyframes bamz_spinner { to {transform: rotate(360deg);} }
