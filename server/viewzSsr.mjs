@@ -220,6 +220,9 @@ export async function generateSsrContent({sourcePath, base, containerId, htmlPro
                 //ignore stacked route
                 //TODO: should handle them
                 urlRoute = urlRoute.substring(0, urlRoute.search(/\/\*([^*]*)\*\//)) ;
+                if(urlRoute === ""){
+                    urlRoute = "/" ;
+                }
             }
             let route = allRoutes.find(r=>r.regexp.regexp.exec(urlRoute)) ;
             if(route){
