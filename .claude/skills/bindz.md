@@ -98,9 +98,8 @@ bind(document.getElementById('container'), data);
 ```
 
 **How it works**:
-- `z-show-if`: Element has `display: none` when condition is false
-- `z-hide-if`: Element has `display: none` when condition is true
-- Both use CSS visibility, not DOM removal (fast and smooth)
+- `z-show-if`: Element removed from the DOM when condition is false
+- `z-hide-if`: Element removed from the DOM when condition is true
 
 **AI Agent Use Case**: Show different UI sections based on AI analysis results (e.g., show error warnings only when errors exist, show advanced options based on user expertise level).
 
