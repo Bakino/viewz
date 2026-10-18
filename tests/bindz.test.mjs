@@ -1,4 +1,4 @@
-import { BindZ, DataZ, Hider, Repeater } from "../html/lib/bindz.mjs";
+import { BindZ, DataZ, Hider, Repeater } from "../lib/bindz.mjs";
 import { structuredClone } from 'structured-clone-polyfill';
 
 global.structuredClone = structuredClone;
@@ -355,6 +355,34 @@ describe('BindZ', () => {
       bindZ.prepare();
       
       expect(bindZ.hidings).toHaveLength(1);
+    });
+
+    test('should resolve bindings before a shown node re-enters the DOM', () => {
+      // a custom element's connectedCallback runs synchronously on insertion:
+      // it must already see resolved attributes, not stale or raw template text
+      const seen = [];
+      class ProbeHider extends HTMLElement {
+        connectedCallback() {
+          seen.push(this.getAttribute('label'));
+        }
+      }
+      customElements.define('z-probe-hider', ProbeHider);
+
+      const container = document.createElement('div');
+      container.innerHTML = '<z-probe-hider z-show-if="visible" label="${text}"></z-probe-hider>';
+      document.body.appendChild(container);
+
+      const bindZ = new BindZ(container, { visible: false, text: 'first' });
+      bindZ.startBinding();
+      expect(container.querySelector('z-probe-hider')).toBeNull();
+
+      // ignore the initial connection (before any binding ran), only the re-show matters
+      seen.length = 0;
+      bindZ.data.data.text = 'second';
+      bindZ.data.data.visible = true;
+
+      expect(container.querySelector('z-probe-hider')).not.toBeNull();
+      expect(seen).toEqual(['second']);
     });
   });
 

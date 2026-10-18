@@ -1,4 +1,4 @@
-import { DataZ } from '../html/lib/bindz.mjs'; // Update with actual path
+import { DataZ } from '../lib/bindz.mjs'; // Update with actual path
 import { jest } from '@jest/globals';
 import { structuredClone } from 'structured-clone-polyfill';
 
